@@ -1,0 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+@import "@/style/variable.scss";
+@import "~bootstrap/scss/bootstrap";
+
+//COMMON 
+body{
+    font-family: 'Quicksand', sans-serif;
+    color: $text-main-color;
+}
+
+img{
+    display: block;
+    width: 100%;
+}
+
+//Reset
+*{
+    margin: 0;
+    padding:0;
+    box-sizing: border-box;
+}
