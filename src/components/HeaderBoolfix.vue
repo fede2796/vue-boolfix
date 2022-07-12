@@ -1,61 +1,63 @@
 <template>
-<header>
+  <header>
     <div>
-        <h1>BoolFlix</h1>
+      <h1>boolflix</h1>
     </div>
-    <div class="search">
-        <input type="text" placeholder="Cerca il film o la serie tv" v-model="searchtext">
-        <button @click.prevent="searchName()">Submit</button>
+    <div class="inputs"> 
+      <input type="text" placeholder="cerca" v-model="searchText">
+      <button @click.prevent="sendSearchText()">submit</button>
     </div>
-</header>
+   
+  </header>
 </template>
 
 <script>
-export default{
-    name: "HeaderBoolfix",
-    data(){
-        return{
-            searchtext: '',
-        }
-    },
-    methods:{
-        searchName(){
-            if(this.searchtext !== ''){
-                this.$emit("sendtext", this.searchtext);
-                this.searchtext = "";
-            }
-        }
+export default {
+  name: "HeaderBoolfix",
+  data(){
+    return{
+      searchText: '',
     }
+  },
+  methods: {
+    sendSearchText(){
+      if(this.searchText !== ''){
+        this.$emit("sendText", this.searchText);
+        this.searchText = "";
+      }           
+    }
+  }
 }
 </script>
 
 <style lang="scss" scoped>
-    header{
-        height: 80px;
-        background-color: black;
-        display: flex;
-        justify-content: center;
-        justify-content: space-between;
-
-        h1{
-            text-transform: uppercase;
-            font-size: 28px;
-            padding: 0 40px;
-            color: red;
-        }
-
-        .search{
-            font-size: 20px;
-            padding: 0 20px;
-            margin: 5px 20px;
-            outline: none;
-        }
-
-        button{
-            font-size: 20px;
-            padding: 1px 20px;
-            border-radius: 6px;
-            margin-left: 5px;
-        }
+  header{
+    height: 70px;
+    background-color: black;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    h1{
+      text-transform: uppercase;
+      font-size: 25px;
+      padding: 0 20px;
+      color: red;
     }
+    .inputs{
+      
+      padding: 0 20px;
+      
+      input{
+        font-size: 18px;
+        padding: 0 10px;
+        margin: 0 15px;
+        outline: none;
+      }
+      button{
+        font-size: 18px;
+        padding: 1px 10px;
+        border-radius: 5px;
+      }
+    }
+  }
 </style>

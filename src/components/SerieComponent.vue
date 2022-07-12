@@ -1,17 +1,17 @@
 <template>
   <div class="film">
-    <div><span>Titolo: </span>{{ Film.title }}</div>
-    <div><span>Titolo originale: </span>{{ Film.original_title }}</div>
-    <div><span>{{ Film.original_language }}: </span><img class="flags" :src="getFlags(Film.original_language)" alt="dd"></div>
+    <div><span>Titolo: </span>{{ Film.name }}</div>
+    <div><span>Titolo originale: </span>{{ Film.original_name }}</div>
     <div><span>voto: </span>{{ Film.vote_average }}</div>
-     <img class="film_poster" :src="getImg(Film.poster_path)" alt="">
+    <div><span>{{ Film.original_language }}</span><img :src="getFlags(Film.original_language)" alt="dd"></div>
+    
     <div class="fleg"></div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "ComponentFilm",
+  name: "FilmComponent",
   props:{
     Film:Object,
   },
@@ -28,11 +28,10 @@ export default {
         nazionalita = "cz";
       } else if(nazionalita == 'ko'){
         nazionalita = "kr";
+      }  else if(nazionalita == 'zh'){
+        nazionalita = "cn";
       }
       return `https://countryflagsapi.com/png/${nazionalita}`;
-    },
-    getImg(path){
-      return `https://image.tmdb.org/t/p${path}`
     }
   }
 }
@@ -50,15 +49,11 @@ export default {
         font-weight: 800;
       }
     }
-    .flags{
+    img{
       width: 30px;
       height: 20px;
       display: inline;
       margin: 0 10px;
-    }
-    .film_poster{
-      width: 70px;
-      height: 70px;
     }
   }
 </style>
