@@ -1,27 +1,36 @@
 <template>
+  <!-- Cards Container -->
   <div class="container-fluid">
+    <!-- Section Name -->
     <div class="sectionTitle">Film</div>
-    <div class="row row-cols-4 py-1 horizonal-scroll">
+    <!-- Horizontal Scroller -->
+    <div class="row row-cols-5 py-1 horizonal-scroll">     
       <div class="col" v-for="film in filmArray" :key="film.id">
-        <ComponentFilm :Film="film" :GenreSerieArray="GenreSerieArray"/>
+        <FilmComponent :Film="film" :GenreSerieArray="GenreSerieArray"/>
       </div>
-      <div class="sectionTitle">Serie TV</div>
-       <div class="row row-cols-4 py-1 horizonal-scroll"> 
-        <div class="col" v-for="serie in serieArray" :key="serie.id">
-        <SerieComponent :Film="serie" :textToSearch="textToSearch"/>
-      </div></div>
-     
+    </div>
+    <!-- Section Name -->
+    <div class="sectionTitle">Serie TV</div>
+    <!-- Horizontal Scroller -->
+    <div class="row row-cols-5 py-1 horizonal-scroll">
+      <div class="col" 
+      v-for="serie in serieArray" 
+      :key="serie.id">
+        <SerieComponent :Serie="serie" :textToSearch="textToSearch"/>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-  import ComponentFilm from './ComponentFilm.vue';
+  // Import
   import SerieComponent from './SerieComponent.vue';
+  import FilmComponent from './FilmComponent.vue';
+  
   export default {
     name: "BoolflixComponent",
     components: {
-      ComponentFilm,
+      FilmComponent,
       SerieComponent,
     },
     props:{
@@ -35,7 +44,8 @@
 </script>
 
 <style lang="scss" scoped>
-   .container-fluid{
+  // section Style
+  .container-fluid{
     padding-bottom: 80px;
     height: 100%;
     .sectionTitle{

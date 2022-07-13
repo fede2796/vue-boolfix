@@ -54,8 +54,7 @@ export default {
   },
   methods:{    
     getFlags(nazionalita){
-      
-      if(nazionalita == 'en'){
+       if(nazionalita == 'en'){
         nazionalita = "gb";
       } else if(nazionalita == 'ja'){
         nazionalita = "jp";
@@ -65,6 +64,10 @@ export default {
         nazionalita = "cz";
       } else if(nazionalita == 'ko'){
         nazionalita = "kr";
+      } else if(nazionalita == 'sv'){
+        nazionalita = "ch";
+      } else if(nazionalita == 'fa'){
+        nazionalita = "af";
       }
       return `https://countryflagsapi.com/png/${nazionalita}`;
     },
@@ -135,7 +138,7 @@ export default {
       text-align: center;
       line-height: 20px;
     }
-     &:hover.hoverEffect{
+      &:hover .hoverEffect{
       position: absolute;
       top: 0;
       left: 0;
@@ -185,11 +188,11 @@ export default {
         margin: 0 5px;
       }
     
-    
-    &:hover .hoverEffect{
+      &:hover .hoverEffect{
       opacity: 1;
       background-color: rgba($color: #000000, $alpha: 0.9);
     }
+    
     
     .film_poster{
       width: 100%;
