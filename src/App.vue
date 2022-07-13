@@ -5,7 +5,12 @@
     />
 
     <main>
-      <FilmMain :filmArray="this.filmArray" :serieArray="this.serieArray"/>
+      <FilmMain  
+      :filmArray="this.filmArray" 
+      :serieArray="this.serieArray"
+      :GenreFilmArray="this.GenreFilmArray"
+      :GenreSerieArray="this.GenreSerieArray"
+      :textToSearch="this.textToSearch"/>/>
     </main>
 
   </div>
@@ -21,6 +26,8 @@ export default {
     return{
       filmArray: [],
       serieArray: [],
+      GenreFilmArray: [],
+      GenreSerieArray: [],
       textToSearch: "",
     }
   },
@@ -31,6 +38,8 @@ export default {
   mounted(){
     this.searchAllFilms();
     this.searchAllTvSeries();
+      this.searchAllMovieGenre();
+    this.searchAllTvGenre();
   },
   methods: {    
     searchAllFilms(){
@@ -61,6 +70,20 @@ export default {
         })
       }     
     },
+     searchAllMovieGenre(){ 
+      // Scarico l' arrey dei generi dei film
+      axios.get(`https://api.themoviedb.org/3/genre/movie/list?api_key=5815a78aa9854a6ec9c6ecbc2b07ad60`)
+      .then(response => {        
+        this.GenreFilmArray = response.data.genres;
+      }) 
+    },
+     searchAllTvGenre(){
+      // Scarico l' arrey dei generi delle serie tv
+      axios.get(`https://api.themoviedb.org/3/genre/tv/list?api_key=5815a78aa9854a6ec9c6ecbc2b07ad60`)
+      .then(response => {        
+        this.GenreSerieArray = response.data.genres;
+      })  
+    },
     searchText(text){
       this.textToSearch = text;
       this.textToSearch = this.textToSearch.replace(" ","+")
@@ -75,6 +98,21 @@ export default {
   @import "src/style/common.scss";
   #app{
     width: 100%;
-    background-color: grey;
+    background-color: #222;
+    min-height: 100vh;
+    // Scrollbar Modification
+      &::-webkit-scrollbar {
+        width: 10px;
+        height: 22px;
+      }
+      &::-webkit-scrollbar-thumb:hover {
+        background-color: grey;
+      }
+      &::-webkit-scrollbar-thumb {
+        background-color: #222;
+        border-radius: 20px;
+        border: 6px solid transparent;
+        background-clip: content-box;
+      }
   }
 </style>
