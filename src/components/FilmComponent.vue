@@ -1,16 +1,19 @@
 <template>
-<!-- Card -->
+  <!-- Card -->
   <div class="film">
-    <!-- Immagine Card -->
+    <!-- Card Image -->
     <img class="film_poster" :src="getImg(Film.poster_path)" :alt="Film.title">
-    <div class="dd">sda</div>
-    <!-- effetto hover -->
-     <div class="hoverEffect">
+    <div class="wrapper">
+      <div class="genre-side" v-for="(singlefilm,index) in Film.genre_ids" :key="index">{{ getGenre(singlefilm) }}</div>
+    </div>
+    
+    <!-- Hover effect on the card -->
+    <div class="hoverEffect">
       <div>
-        <span>Titolo: </span>{{ Film.title }}
+        <span>Titolo: </span>{{ Film.title ? Film.title : Film.name }}
       </div>
       <div>
-        <span>Titolo originale: </span>{{ Film.original_title }}
+        <span>Titolo originale: </span>{{ Film.original_title ? Film.original_title : Film.original_name }}
       </div>
       <div>
         <span>Cast: </span><span class="cast">{{ this.namesCast }}</span>
@@ -18,43 +21,45 @@
       <div>
         <img class="flags" :src="getFlags(Film.original_language)" alt="dd">
       </div>
-       <div>
+      <div>
         <span>voto: </span>
         <!-- creo 5 stelline e le coloro in base al risultato della function -->
         <span><i class="fa-solid fa-star star-space" :class="{'star': n <= getStars(Film.vote_average)}" v-for="n in 5" :key="n"></i></span>
       </div>
-       <!-- controllo se il film non abbia descrizione -->
+      <!-- controllo se il film non abbia descrizione -->
       <div v-if="Film.overview !== '' ">
         <span>overview: </span>
         <div class="scroll">
           <span class="overview-text">{{ Film.overview }}</span>
         </div>
       </div>
-     </div>
+    </div>
+
   </div>
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 export default {
-  name: "ComponentFilm",
+  name: "FilmComponent",
   props:{
     Film:Object,
-    GenreSerieArray: Array,
+    GenreFilmArray: Array,
   },
   data(){
-      return{
+    return{
       castArray: [],
       namesCast: "",
-      GenreArray: [],
     }
   },
-    mounted(){
+  mounted(){
     this.getCast(this.Film);
   },
-  methods:{    
+  methods:{  
+    //vedo quali flags non vengono rilevate e le sostituisco 
     getFlags(nazionalita){
-       if(nazionalita == 'en'){
+      
+      if(nazionalita == 'en'){
         nazionalita = "gb";
       } else if(nazionalita == 'ja'){
         nazionalita = "jp";
@@ -69,17 +74,23 @@ export default {
       } else if(nazionalita == 'fa'){
         nazionalita = "af";
       }
+      // poi ritorno la bandiera
       return `https://countryflagsapi.com/png/${nazionalita}`;
     },
     getImg(path){
+      // controllo se l'img sia diversa da null
       if(path === null){
-          return 'https://adriaticaindustriale.it/wp-content/uploads/2020/02/not-found.png'
+        // se è uguale allora gli do una di default
+        return 'https://adriaticaindustriale.it/wp-content/uploads/2020/02/not-found.png'
       }
-       return `https://image.tmdb.org/t/p/w342${path}`
+      // altrimenti la faccio stampare
+      return `https://image.tmdb.org/t/p/w342${path}`
     },
-      getStars(star){    
-      const starcount = star/ 2;
-      return Math.round(starcount);
+    getStars(star){    
+      // divido star che è un valore di 1 a 10 / 2
+      const starcount = Math.round(star)
+      // poi lo arrotondo per eccesso
+      return starcount / 2;
     },
      getCast(textToSearch){  
       const search = textToSearch.id;
@@ -104,41 +115,35 @@ export default {
         }
         //se la chiamata non va buon fine scrivo no cast e cancello la console 
       }).catch(() => {
-        console.clear();
-        this.namesCast = "no cast";
+        
+        this.namesCast = "no cast found";
       })    
       return this.namesCast;         
     },
-    getGenre(s,genre_ids){
-      this.GenreArray = s;
-      console.log("genre_ids",genre_ids);
-      return "abc";
+    getGenre(Film){ 
+      
+      let genre = 0;
+      for (let index = 0; index < this.GenreFilmArray.length; index++) {
+        if(this.GenreFilmArray[index].id === Film){
+          genre = this.GenreFilmArray[index].name;
+        }    
+      }
+      
+      return genre;
     }
   }
 }
 </script>
  
 <style lang="scss" scoped>
-  .film{
-     height: 100%;
-    position: relative;
+  .film{   
+    height: 600px;
+    width: 400px;
     overflow: hidden;
-    margin: 0 5px;
+    /* margin: 0 5px; */
     cursor: pointer;
-
-      .dd{
-      position: absolute;
-      color: black;
-      z-index: 50;
-      bottom: 3px;    
-      right: 3px;
-      background-color: white;
-      width: 100px;
-      height: 20px;
-      text-align: center;
-      line-height: 20px;
-    }
-      &:hover .hoverEffect{
+    position: relative;
+    .hoverEffect{
       position: absolute;
       top: 0;
       left: 0;
@@ -146,7 +151,7 @@ export default {
       right: 0;
       opacity: 0;
       padding: 5px 10px;
-    }
+      
       div{
         text-transform: uppercase;
         padding: 8px 0 5px;
@@ -158,21 +163,30 @@ export default {
             font-size: 16px;
           }
         }
-      }
-     .scroll{
+      
+        .scroll{
           height: 200px;
           width: 100%;  
           overflow-y: auto;
+          // Scrollbar Modification
           &::-webkit-scrollbar {
-            display: none;
+            width: 10px;
+            height: 22px;
+          }
+          &::-webkit-scrollbar-thumb:hover {
+            background-color: grey;
+          }
+          &::-webkit-scrollbar-thumb {
+            background-color: #222;
+            border-radius: 20px;
+            border: 6px solid transparent;
           }
           .overview-text{
             font-weight: 100;
             text-transform: lowercase;
             font-size: 16px;
           }
-        }
-        
+        }       
       }
       .star-space{
         padding: 0 2px;
@@ -186,17 +200,39 @@ export default {
         height: 20px;
         display: inline;
         margin: 0 5px;
+      } 
+    }
+    .wrapper{
+      position: absolute;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      color: black;
+      z-index: 50;
+      bottom: 0px;    
+      right: -5px;
+      text-align: center;
+      line-height: 20px;
+      width: 100%;
+      margin-bottom: 5px;
+      .genre-side{
+        margin: 2px 2px;
+        padding: 5px;
+        background-color: white;
+        box-shadow: 5px 10px 8px #666;
       }
-    
-      &:hover .hoverEffect{
+    }
+    &:hover .wrapper{
+      opacity: 0;
+    }
+    &:hover .hoverEffect{
       opacity: 1;
       background-color: rgba($color: #000000, $alpha: 0.9);
     }
-    
     
     .film_poster{
       width: 100%;
       height: 100%;
     }
-  
+  }
 </style>
